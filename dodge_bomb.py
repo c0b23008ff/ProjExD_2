@@ -1,6 +1,7 @@
 import os
 import sys
 import random
+import time
 import pygame as pg
 
 
@@ -11,6 +12,7 @@ DELTA = { # 移動量辞書（押下キー　：　移動量タプル）
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0),
 }
+
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,7 +43,6 @@ def main():
     bd_rct = bd_img.get_rect()
     vx, vy = +5, +5
     bd_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
-
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -49,7 +50,7 @@ def main():
             if event.type == pg.QUIT: 
                 return
         if kk_rct.colliderect(bd_rct):  # こうかとんと爆弾がぶつかったら
-            print("Gmame Over")
+            GameOver()
             return
         screen.blit(bg_img, [0, 0]) 
 
@@ -83,6 +84,37 @@ def main():
         tmr += 1
         clock.tick(50)
 
+def GameOver():
+    """
+    ゲームオーバーになったときに発動する関数
+    暗く半透明のバックグラウンド+文字+こうかとん
+    """
+    fonto = pg.font.Font(None, 80)
+    txt = fonto.render("Game Over", True, (255, 255, 255))
+    clock = pg.time.Clock()
+    screen = pg.display.set_mode((WIDTH, HEIGHT))
+    bg_img = pg.image.load("fig/pg_bg.jpg") 
+    end_kk_rct = pg.image.load("fig/8.png")
+    end_kk_rct = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 2.0) 
+    bg_img.set_alpha(100)
+    screen.blit(bg_img, [0, 0])
+    screen.blit(txt, [WIDTH/2, HEIGHT/2])
+    screen.blit(end_kk_rct, [WIDTH/2-100, HEIGHT/2])
+    screen.blit(end_kk_rct, [WIDTH/2+350, HEIGHT/2])
+    pg.display.update()
+    print("Gmame Over")
+    time.sleep(5)
+    #clock.tick(1/5)
+
+def kasoku():
+    """
+    爆弾の速度を加速させる関数
+    10段階に分けて速度を加速する
+    """
+    acc = [a for a in range(1, 11)]
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bb_img, (255,0,0), (10*r, 10*r), 10*r)
 
 if __name__ == "__main__":
     pg.init()
