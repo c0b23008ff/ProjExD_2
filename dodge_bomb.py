@@ -51,7 +51,7 @@ def main():
             game_over() #  ゲームオーバーの関数を呼び出す
             return
         screen.blit(bg_img, [0, 0]) 
-        key_lst = pg.key.get_pressed()
+        key_lst = pg.key.get_pressed() #  ボタンが押された時こうかとんを動かす
         sum_mv = [0, 0]
         for k, v in DELTA.items():
             if key_lst[k]:
@@ -66,12 +66,12 @@ def main():
         #if key_lst[pg.K_RIGHT]:
         #    sum_mv[0] += 5
         kk_rct.move_ip(sum_mv)
-        if check_bound(kk_rct) != (True, True):
+        if check_bound(kk_rct) != (True, True): #  こうかとんが画面外に出た時に位置の更新を止める
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
         bd_rct.move_ip(vx, vy)
         screen.blit(bd_img, bd_rct)
-        yoko, tate = check_bound(bd_rct)
+        yoko, tate = check_bound(bd_rct) #  爆弾を反転させる
         if not yoko:
             vx *= -1
         if not tate:
@@ -97,7 +97,7 @@ def game_over():
     screen.blit(end_kk_rct, [WIDTH/2-100, HEIGHT/2]) #  こうかとんを表示
     screen.blit(end_kk_rct, [WIDTH/2+350, HEIGHT/2]) #  こうかとんを表示
     pg.display.update()
-    print("Gmame Over")
+    print("Game Over")
     time.sleep(5)
     #clock.tick(1/5)
 
